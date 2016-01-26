@@ -1,0 +1,237 @@
+/*@import url(https://fonts.googleapis.com/css?family=Open+Sans:300);*/
+
+body {
+    padding-top: 90px;
+}
+.main {
+    max-width: 320px;
+    margin: 0 auto;
+}
+.login-or {
+    position: relative;
+    font-size: 18px;
+    color: #aaa;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.span-or {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: -2px;
+    margin-left: -25px;
+    background-color: #fff;
+    width: 50px;
+    text-align: center;
+}
+.hr-or {
+    background-color: #cdcdcd;
+    height: 1px;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+h3 {
+    text-align: center;
+    line-height: 300%;
+}
+
+.cursorPointer {
+    cursor: pointer;
+}
+
+.centered {
+    text-align: center;
+}
+
+.title {
+    padding-top: 15px;
+}
+
+#skip{
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin-left: 0;
+    text-align: center;
+    list-style: outside none;
+}
+
+#skip a{
+    left: -99999px;
+    top: 30px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+
+
+.overlay-loader {
+    display: block;
+    margin: auto;
+    width: 113px;
+    height: 113px;
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width: 113px;
+    height: 113px;
+    animation-name: rotateAnim;
+    -o-animation-name: rotateAnim;
+    -ms-animation-name: rotateAnim;
+    -webkit-animation-name: rotateAnim;
+    -moz-animation-name: rotateAnim;
+    animation-duration: 0.4s;
+    -o-animation-duration: 0.4s;
+    -ms-animation-duration: 0.4s;
+    -webkit-animation-duration: 0.4s;
+    -moz-animation-duration: 0.4s;
+    animation-iteration-count: infinite;
+    -o-animation-iteration-count: infinite;
+    -ms-animation-iteration-count: infinite;
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    -o-animation-timing-function: linear;
+    -ms-animation-timing-function: linear;
+    -webkit-animation-timing-function: linear;
+    -moz-animation-timing-function: linear;
+}
+.loader div {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 1px solid rgb(0,0,0);
+    position: absolute;
+    top: 2px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}
+.loader div:nth-child(odd) {
+    border-top: none;
+    border-left: none;
+}
+.loader div:nth-child(even) {
+    border-bottom: none;
+    border-right: none;
+}
+.loader div:nth-child(2) {
+    border-width: 2px;
+    left: 0px;
+    top: -5px;
+    width: 14px;
+    height: 14px;
+}
+.loader div:nth-child(3) {
+    border-width: 2px;
+    left: -1px;
+    top: 3px;
+    width: 20px;
+    height: 20px;
+}
+.loader div:nth-child(4) {
+    border-width: 3px;
+    left: -1px;
+    top: -5px;
+    width: 27px;
+    height: 27px;
+}
+.loader div:nth-child(5) {
+    border-width: 3px;
+    left: -1px;
+    top: 5px;
+    width: 36px;
+    height: 36px;
+}
+.loader div:nth-child(6) {
+    border-width: 5px;
+    left: 0px;
+    top: -5px;
+    width: 45px;
+    height: 45px;
+}
+.loader div:nth-child(7) {
+    border-width: 5px;
+    left: 0px;
+    top: 7px;
+    width: 56px;
+    height: 56px;
+}
+
+
+@keyframes rotateAnim {
+    from {
+        transform: rotate(360deg);
+    }
+    to {
+        transform: rotate(0deg);
+    }
+}
+
+@-o-keyframes rotateAnim {
+    from {
+        -o-transform: rotate(360deg);
+    }
+    to {
+        -o-transform: rotate(0deg);
+    }
+}
+
+@-ms-keyframes rotateAnim {
+    from {
+        -ms-transform: rotate(360deg);
+    }
+    to {
+        -ms-transform: rotate(0deg);
+    }
+}
+
+@-webkit-keyframes rotateAnim {
+    from {
+        -webkit-transform: rotate(360deg);
+    }
+    to {
+        -webkit-transform: rotate(0deg);
+    }
+}
+
+@-moz-keyframes rotateAnim {
+    from {
+        -moz-transform: rotate(360deg);
+    }
+    to {
+        -moz-transform: rotate(0deg);
+    }
+}
+
+.modal {
+    text-align: center;
+    padding: 0!important;
+}
+
+.modal:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-right: -4px; /* Adjusts for spacing */
+}
+
+.modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+}
