@@ -38,18 +38,36 @@ class UserController extends Controller {
 
 	public function getUser($email)
 	{
-		return $this->userModel->getUser($email);
+		$getUser = $this->userModel->getUser($email);
+
+		if ($getUser && is_array($getUser)) {
+			$result['response'] = true;
+			$result['data'] = $getUser[0];
+		} else {
+			$result['response'] = false;
+			$result['data'] = array();
+		}
+
+		return json_encode($result);
 	}
 
 	public function insertUser()
 	{
 		$data = Request::all();
+		$result = array();
 
 		if (!$this->getUser($data['email'])) {
-			$result = $this->userModel->insertUser((object)($data));
+			$insertResponse = $this->userModel->insertUser((object)($data));
+
+			if ($insertResponse) {
+				$result['response'] = true;
+				$result['msg'] = 'User created successfully';
+			}
 		} else {
-			echo "User exist";
+			$result['response'] = false;
+			$result['msg'] = 'User exist';
 		}
 
+		return json_encode($result);
 	}
 }

@@ -16,6 +16,7 @@
             'goBack' : 0
         };
         $scope.store.addedItems = [];
+        $scope.store.errorFields = [];
         $scope.store.detail = storeObj.detail ? (storeObj.detail) : {};
 
         if (storeObj.detail) {
@@ -25,24 +26,32 @@
         console.log($scope.store);
         $scope.store.saveStoreDetails = function () {
             dataFactory.saveData('saveStoreDetails', $scope.store).then(function(response) {
+                $scope.store.errorFields = response.fieldName;
+
                 if (!response.response) {
                     $scope.store.setupError = response.msg;
                 } else {
                     $scope.store.setupDetail.storeId = response.storeId;
+                    $scope.store.setupDetail.storeName = $scope.store.detail.name;
                     $scope.store.setupDetail.wizardStep = 2;
+                    $scope.store.setupError = false;
                 }
             });
         };
 
         $scope.store.saveItem = function () {
             dataFactory.saveData('saveItem', $scope.store).then(function(response) {console.log(response);
+                $scope.store.errorFields = response.fieldName;
+
                 if (!response.response) {
-                    $scope.store.setupError = response.msg;
+                    $scope.store.addItemError = response.msg;
                 } else {
+                    $scope.store.addItemError = false;
                     $scope.store.addedItems.unshift([
                         $scope.store.newitem.name,
                         $scope.store.newitem.price
                     ]);
+                    delete $scope.store.newitem;
                 }
             });
         };
@@ -51,6 +60,9 @@
             dataFactory.getData('storePresence', $scope.store.detail.name).then(function(response) {
                 if (!response.response) {
                     $scope.store.setupError = response.msg;
+                    if (response.fieldName) {
+                        $scope.store.errorFields.push(response.fieldName);
+                    }
                 } else {
                     $scope.store.setupError = false;
                 }
@@ -68,6 +80,10 @@
         };
 
         $scope.store.continueToDashboard = function () {
+            if ($scope.store.setupDetail) {
+                delete $scope.store.setupDetail;
+            }
+
             modalInstance ? modalInstance.dismiss(): '';
             modalInstance = $uibModal.open({
                 templateUrl: 'configuring-dashboard.html',

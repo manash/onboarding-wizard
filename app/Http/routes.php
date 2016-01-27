@@ -45,4 +45,12 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('wizard/getstoresmenuitem/{url}', array('as' => 'getStoresMenuItem', 'uses' => 'StoreController@getStoreMenuItems'));
 
 	Route::post('wizard/skipstep', array('as' => 'skipStep', 'uses' => 'StoreController@skipStep'));
+
+	// Api Routes
+	Route::get('api/checkstorepresence/{id}/{url}', array('uses' => 'ApiController@checkIfStorePresent'));
+	Route::post('api/insertstore', array('uses' => 'ApiController@insertNewStore'));
+
+	Route::get('api/checkitempresence/{id}/{url}', array('uses' => 'ApiController@checkIfStoreItemPresent'));
+	Route::get('api/getallstoreitems/{id}', array('uses' => 'ApiController@getStoreMenuItems'));
+
 });

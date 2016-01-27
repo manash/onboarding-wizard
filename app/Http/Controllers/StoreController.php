@@ -5,7 +5,7 @@ use Request, Auth;
 
 class StoreController extends Controller {
 
-	private $wizardName, $loginUserId;
+	private $wizardName, $loginUserId, $storeModel, $wizardModel, $storeSetupOrder;
 
 	/**
 	 * Create a new controller instance.
@@ -48,7 +48,7 @@ class StoreController extends Controller {
 			$incompleteSetup = $this->storeModel->checkIncompleteStoreSetup($this->loginUserId);
 
 			if ($incompleteSetup && is_array($incompleteSetup) && array_key_exists(0, $incompleteSetup) &&
-				$incompleteSetup[0]->step !== COUNT($data['wizardStepDetail'])) {
+				$incompleteSetup[0]->step < COUNT($data['wizardStepDetail'])) {
 				$data['storeId'] = $incompleteSetup[0]->fk_store_id;
 				$data['storeName'] = $incompleteSetup[0]->store_name;
 				$data['wizardStep'] = $incompleteSetup[0]->step + 1;
@@ -65,7 +65,7 @@ class StoreController extends Controller {
 
 			return view('storeOnboarding', ['data' => $data]);
 		} else {
-			$this->dashboard();
+			return redirect('wizard/dashboard');
 		}
 	}
 
@@ -76,7 +76,9 @@ class StoreController extends Controller {
 	public function addStore()
 	{
 		$data = Request::all();
-		$result = array();
+		$result = array(
+			'fieldName' => array()
+		);
 
 		$data['detail']['userId'] = $this->loginUserId;
 
@@ -84,8 +86,13 @@ class StoreController extends Controller {
 			array_key_exists('setupDetail', $data) && array_key_exists('storeId', $data['setupDetail']) && $data['setupDetail']['storeId']) {
 			$result['response'] = true;
 			$result['storeId'] = $data['setupDetail']['storeId'];
-			$result['msg'] = 'Store exists';
-		} else if ($data && array_key_exists('detail', $data) && array_key_exists('name', $data['detail'])) {
+			$result['msg'] = 'Store already exists';
+		} else if ($data && array_key_exists('detail', $data) &&
+				array_key_exists('name', $data['detail']) && $data['detail']['name'] &&
+				array_key_exists('address', $data['detail']) && $data['detail']['address'] &&
+				array_key_exists('city', $data['detail']) && $data['detail']['city'] &&
+				array_key_exists('phone', $data['detail']) && $data['detail']['phone'] &&
+				array_key_exists('pin', $data['detail']) && $data['detail']['pin']) {
 			$storeAlreadyPresent = $this->checkIfStorePresent($data['detail']['name']);
 
 			if (!empty($storeAlreadyPresent)) {
@@ -100,13 +107,35 @@ class StoreController extends Controller {
 				$result['msg'] = 'Store detail saved';
 			} else {
 				$result['response'] = false;
+				$result['fieldName'] = array('name');
 				$result['msg'] = 'Store already exist';
 			}
 		} else {
 			$result['response'] = false;
-			$result['msg'] = 'Invalid Request';
-		}
+			$result['msg'] = 'Invalid Request.';
+			$field = array();
 
+			if (!array_key_exists('name', $data['detail'])) {
+				array_push($field, 'name');
+ 			}
+			if (!array_key_exists('address', $data['detail'])) {
+				array_push($field, 'address');
+			}
+			if (!array_key_exists('city', $data['detail'])) {
+				array_push($field, 'city');
+			}
+			if (!array_key_exists('phone', $data['detail'])) {
+				array_push($field, 'phone');
+			}
+			if (!array_key_exists('pin', $data['detail'])) {
+				array_push($field, 'pin');
+			}
+
+			if ($field) {
+				$result['fieldName'] = $field;
+				$result['msg'] .= ' Please select ' . implode(", ", $field);
+			}
+		}
 
 		return json_encode($result);
 	}
@@ -114,17 +143,19 @@ class StoreController extends Controller {
 	public function addStoreItem()
 	{
 		$data = Request::all();
-		$result = array();
+		$result = array(
+			'fieldName' => array()
+		);
 
 		if ($data && array_key_exists('newitem', $data) &&
 			array_key_exists('name', $data['newitem']) && $data['newitem']['name'] &&
 			array_key_exists('price', $data['newitem']) && $data['newitem']['price'] &&
 			array_key_exists('setupDetail', $data) && array_key_exists('storeId', $data['setupDetail']) && $data['setupDetail']['storeId']) {
 
-			$detail =array (
+			$detail = array (
 				'storeId' => $data['setupDetail']['storeId'],
 				'itemName' => $data['newitem']['name'],
-				'price'=> $data['newitem']['price']
+				'price' => $data['newitem']['price']
 			);
 
 			if (!$this->storeModel->getStoreProduct((object) $detail)) {
@@ -141,8 +172,22 @@ class StoreController extends Controller {
 				$result['msg'] = 'Item already exist for the store';
 			}
 		} else {
+			$field = array();
 			$result['response'] = false;
 			$result['msg'] = 'Invalid Request';
+
+			if (!array_key_exists('newitem', $data)) {
+				array_push($field, 'name', 'price');
+			} else if (array_key_exists('newitem', $data) && !array_key_exists('name', $data['newitem'])){
+				array_push($field, 'name');
+			} else if (array_key_exists('newitem', $data) && !array_key_exists('price', $data['newitem'])){
+				array_push($field, 'price');
+			}
+
+			if ($field) {
+				$result['fieldName'] = $field;
+				$result['msg'] .= ' Please select ' . implode(", ", $field);
+			}
 		}
 
 		return json_encode($result);
@@ -163,6 +208,7 @@ class StoreController extends Controller {
 
 		if ($response && count($response)) {
 			$result['response'] = false;
+			$result['fieldName'] = 'name';
 			$result['msg'] = 'Store already exist';
 		}
 

@@ -15,8 +15,9 @@
         (function () {
             dashboardFactory.getData('getStores').then(function(response){
                 if (response) {
-                    $scope.dashboard.defaultValue = response[0].name;
                     $scope.dashboard.allStores = response;
+                    $scope.selectedRestaurant = response[0];
+                    $scope.dashboard.showMenuDetails(response[0].id)
                 }
             });
         })();
@@ -24,7 +25,7 @@
         $scope.dashboard.showMenuDetails = function (restaurantId) {
             dashboardFactory.getData('getStoresMenuItem', restaurantId).then(function(response){
                 $scope.$data = response;
-                $scope.dashboard.tableParams = new NgTableParams({ count: response.length}, { counts: [5, 10, 25], dataset: response});
+                $scope.dashboard.tableParams = new NgTableParams({ count: 5}, { counts: [5, 10, 25], dataset: response});
             });
         };
 

@@ -8,13 +8,13 @@ class User
 	{
 		return DB::select('
 			SELECT u.name, u.email, u.phone
-			FROM user AS u
-			WHERE u.email = :email AND u.status = :status', [':email' => $email, ':status' => 1]);
+			FROM users AS u
+			WHERE u.email = :email', [':email' => $email]);
 	}
 
 	public function insertUser($user) {
 		return DB::insert('
-			INSERT INTO user (name, email, phone, password)
+			INSERT INTO users (name, email, phone, password)
 			VALUES (:uname, :email, :phone, :pwd)',
 				[
 					':uname' => $user->name,
