@@ -1,7 +1,7 @@
 @extends('template')
 
 @section('title')
-    Opinio App
+    Opinio App Login
 @stop
 
 @section('ng-app')

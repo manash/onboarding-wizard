@@ -1,7 +1,7 @@
 @extends('template')
 
 @section('title')
-    Laravel
+    Opinio App Registration
 @stop
 
 @section('ng-app')
